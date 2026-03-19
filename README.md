@@ -4,7 +4,7 @@ Use Claude models in [OpenCode](https://opencode.ai) using your existing Claude 
 
 ## Prerequisites
 
-- **macOS** or **Linux**
+- **macOS**, **Linux** or **Windows**
 - **[OpenCode](https://opencode.ai)** installed (desktop app or CLI)
 - **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** (CLI) installed and logged in
 - An active **Claude Pro or Max** subscription
@@ -35,13 +35,21 @@ If not logged in, run `claude` and follow the login flow.
 ```bash
 git clone https://github.com/9clg6/sync-claude-code-token-in-open-code.git
 cd sync-claude-code-token-in-open-code
-chmod +x sync-token.sh
+chmod +x sync-token.sh  # not needed on Windows
 ```
 
 ### 3. Run the sync script
 
+**macOS / Linux / Git Bash:**
+
 ```bash
 ./sync-token.sh
+```
+
+**Windows (PowerShell):**
+
+```powershell
+.\sync-token.ps1
 ```
 
 Expected output:
@@ -107,6 +115,7 @@ The script auto-detects your OS:
 
 - **macOS**: reads the OAuth token from the **macOS Keychain** (where Claude Code stores it under `Claude Code-credentials`)
 - **Linux**: reads the token from **`~/.claude/.credentials.json`** (thanks [@minivolk](https://github.com/minivolk))
+- **Windows**: reads the token from **`%USERPROFILE%\.claude\.credentials.json`** (use `sync-token.ps1` for PowerShell, or `sync-token.sh` via Git Bash)
 
 It then writes the token to `~/.local/share/opencode/auth.json` in the OAuth format that OpenCode expects:
 
@@ -129,7 +138,7 @@ OpenCode recognizes Anthropic as an authenticated provider and exposes Claude mo
 - Make sure Claude Code is installed and you've logged in at least once
 - Run `claude auth status` to check
 
-**"~/.claude/.credentials.json not found"** (Linux)
+**"~/.claude/.credentials.json not found"** (Linux/Windows)
 - Make sure Claude Code is installed and you've logged in at least once
 - Run `claude auth status` to check
 

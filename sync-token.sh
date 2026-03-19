@@ -14,7 +14,7 @@ case "$(uname -s)" in
       exit 1
     fi
     ;;
-  Linux)
+  Linux|MINGW*|MSYS*|CYGWIN*)
     CRED_FILE="$HOME/.claude/.credentials.json"
     if [ ! -f "$CRED_FILE" ]; then
       echo "Error: $CRED_FILE not found."
@@ -24,7 +24,7 @@ case "$(uname -s)" in
     TOKEN_JSON=$(cat "$CRED_FILE")
     ;;
   *)
-    echo "Error: Unsupported OS ($(uname -s)). Only macOS and Linux are supported."
+    echo "Error: Unsupported OS ($(uname -s)). Only macOS, Linux and Windows (Git Bash) are supported."
     exit 1
     ;;
 esac
