@@ -39,8 +39,15 @@ if [ -z "$ACCESS" ] || [ -z "$REFRESH" ]; then
   exit 1
 fi
 
-# Write to OpenCode auth.json (respects XDG_DATA_HOME)
-AUTH_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/opencode"
+# Write to OpenCode auth.json
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*)
+    AUTH_DIR="${XDG_DATA_HOME:-$LOCALAPPDATA}/opencode"
+    ;;
+  *)
+    AUTH_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/opencode"
+    ;;
+esac
 AUTH_FILE="$AUTH_DIR/auth.json"
 mkdir -p "$AUTH_DIR"
 
