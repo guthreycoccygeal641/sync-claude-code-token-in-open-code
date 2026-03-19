@@ -115,7 +115,7 @@ The script auto-detects your OS:
 
 - **macOS**: reads the OAuth token from the **macOS Keychain** (where Claude Code stores it under `Claude Code-credentials`)
 - **Linux**: reads the token from **`~/.claude/.credentials.json`** (thanks [@minivolk](https://github.com/minivolk))
-- **Windows**: reads the token from **`%USERPROFILE%\.claude\.credentials.json`** (use `sync-token.ps1` for PowerShell, or `sync-token.sh` via Git Bash)
+- **Windows** *(untested — contributions welcome)*: reads the token from **`%USERPROFILE%\.claude\.credentials.json`** (use `sync-token.ps1` for PowerShell, or `sync-token.sh` via Git Bash)
 
 It then writes the token to `~/.local/share/opencode/auth.json` in the OAuth format that OpenCode expects:
 
