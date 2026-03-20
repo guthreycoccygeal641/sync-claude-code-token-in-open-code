@@ -113,7 +113,7 @@ Add this line (replace the path with where you cloned the repo):
 
 The script auto-detects your OS:
 
-- **macOS**: reads the OAuth token from the **macOS Keychain** (where Claude Code stores it under `Claude Code-credentials`)
+- **macOS**: first tries the **macOS Keychain** (multiple known Claude service names), then falls back to **`~/.claude/.credentials.json`**
 - **Linux**: reads the token from **`~/.claude/.credentials.json`** (thanks [@minivolk](https://github.com/minivolk))
 - **Windows** *(untested — contributions welcome)*: reads the token from **`%USERPROFILE%\.claude\.credentials.json`** (use `sync-token.ps1` for PowerShell, or `sync-token.sh` via Git Bash)
 
@@ -134,7 +134,7 @@ OpenCode recognizes Anthropic as an authenticated provider and exposes Claude mo
 
 ## Troubleshooting
 
-**"No Claude Code credentials found in macOS Keychain"** (macOS)
+**"No Claude Code credentials found in macOS Keychain or ~/.claude/.credentials.json"** (macOS)
 - Make sure Claude Code is installed and you've logged in at least once
 - Run `claude auth status` to check
 
