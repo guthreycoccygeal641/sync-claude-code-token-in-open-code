@@ -4,24 +4,41 @@
 
 set -e
 
+CRED_FILE="$HOME/.claude/.credentials.json"
+TOKEN_JSON=""
+TOKEN_SOURCE=""
+
+read_token_from_file() {
+  if [ -f "$CRED_FILE" ]; then
+    TOKEN_JSON=$(cat "$CRED_FILE")
+    TOKEN_SOURCE="$CRED_FILE"
+  fi
+}
+
+read_token_from_macos_keychain() {
+  for service in \
+    "Claude Code-credentials" \
+    "Claude Code credentials" \
+    "Claude Code" \
+    "claude-code-credentials"
+  do
+    TOKEN_JSON=$(security find-generic-password -s "$service" -w 2>/dev/null || true)
+    if [ -n "$TOKEN_JSON" ]; then
+      TOKEN_SOURCE="macOS Keychain ($service)"
+      return
+    fi
+  done
+
+  read_token_from_file
+}
+
 # Detect OS and read credentials accordingly
 case "$(uname -s)" in
   Darwin)
-    TOKEN_JSON=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null || true)
-    if [ -z "$TOKEN_JSON" ]; then
-      echo "Error: No Claude Code credentials found in macOS Keychain."
-      echo "Make sure Claude Code is installed and you are logged in (run: claude auth status)"
-      exit 1
-    fi
+    read_token_from_macos_keychain
     ;;
   Linux|MINGW*|MSYS*|CYGWIN*)
-    CRED_FILE="$HOME/.claude/.credentials.json"
-    if [ ! -f "$CRED_FILE" ]; then
-      echo "Error: $CRED_FILE not found."
-      echo "Make sure Claude Code is installed and you are logged in (run: claude auth status)"
-      exit 1
-    fi
-    TOKEN_JSON=$(cat "$CRED_FILE")
+    read_token_from_file
     ;;
   *)
     echo "Error: Unsupported OS ($(uname -s)). Only macOS, Linux and Windows (Git Bash) are supported."
@@ -29,10 +46,35 @@ case "$(uname -s)" in
     ;;
 esac
 
+if [ -z "$TOKEN_JSON" ]; then
+  if [ "$(uname -s)" = "Darwin" ]; then
+    echo "Error: No Claude Code credentials found in macOS Keychain or $CRED_FILE."
+  else
+    echo "Error: $CRED_FILE not found."
+  fi
+  echo "Make sure Claude Code is installed and you are logged in (run: claude auth status)"
+  exit 1
+fi
+
 # Extract OAuth tokens
-ACCESS=$(echo "$TOKEN_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin)['claudeAiOauth']['accessToken'])")
-REFRESH=$(echo "$TOKEN_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin)['claudeAiOauth']['refreshToken'])")
-EXPIRES=$(echo "$TOKEN_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin)['claudeAiOauth']['expiresAt'])")
+PARSED=$(printf '%s' "$TOKEN_JSON" | python3 -c "import json,sys
+raw = sys.stdin.read().strip()
+if not raw:
+    raise SystemExit(1)
+data = json.loads(raw)
+oauth = data.get('claudeAiOauth') or data.get('oauth') or data
+access = oauth.get('accessToken') or oauth.get('access')
+refresh = oauth.get('refreshToken') or oauth.get('refresh')
+expires = oauth.get('expiresAt') or oauth.get('expires')
+if access is None or refresh is None:
+    raise SystemExit(1)
+if expires is None:
+    expires = 0
+print(f'{access}\t{refresh}\t{int(expires)}')")
+
+IFS=$'\t' read -r ACCESS REFRESH EXPIRES << EOF
+$PARSED
+EOF
 
 if [ -z "$ACCESS" ] || [ -z "$REFRESH" ]; then
   echo "Error: Could not extract tokens from credentials."
@@ -82,5 +124,8 @@ else
 EOF
 fi
 
+if [ -n "$TOKEN_SOURCE" ]; then
+  echo "Source: $TOKEN_SOURCE"
+fi
 echo "Done! Anthropic token synced to OpenCode."
 echo "Expires: $(date -r $((EXPIRES / 1000)) 2>/dev/null || date -d @$((EXPIRES / 1000)) 2>/dev/null || echo "timestamp $EXPIRES")"
